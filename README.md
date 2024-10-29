@@ -2,15 +2,15 @@
 
 This project is a proof of concept for building a node-based system in React. It shows basic ideas and tests if the approach works, but it’s not a full or final version.
 
-<!-- # Getting Started
+# Getting Started
 
 Follow these steps to download and run the project on your local machine.
 
 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/vvsitnic/node-based-system
+cd node-based-system
 ```
 
 2. Install Dependencies
@@ -29,4 +29,4 @@ yarn dev
 pnpm dev
 # or
 bun dev
-``` -->
+```
