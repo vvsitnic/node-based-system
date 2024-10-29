@@ -44,28 +44,43 @@ const Context = () => {
         return [...notActiveNodes, { id: Math.random(), isActive: true }];
       });
     }
-
-    if (e.code === 'Backspace' || e.code === 'Delete') {
-    }
   }, []);
 
-  // Listen to shift key interaction and write it down
-  const handleShiftKey = useCallback((e: KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.code === 'Backspace' || e.code === 'Delete') {
+      setNodeList(prevNodeList => {
+        return prevNodeList.filter(node => !node.isActive);
+      });
+    }
+
     shiftPressedRef.current = e.shiftKey;
   }, []);
+
+  const handleKeyUp = useCallback((e: KeyboardEvent) => {
+    shiftPressedRef.current = e.shiftKey;
+  }, []);
+
+  // Ensure refs are correctly set for remaining nodes
+  useEffect(() => {
+    for (const [key, value] of Object.entries(nodeRefs.current)) {
+      if (!value) {
+        delete nodeRefs.current[key];
+      }
+    }
+  }, [nodeList]);
 
   // Handle key press events
   useEffect(() => {
     window.addEventListener('keypress', handleSpaceKeyPress);
-    window.addEventListener('keydown', handleShiftKey);
-    window.addEventListener('keyup', handleShiftKey);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
 
     return () => {
       window.removeEventListener('keypress', handleSpaceKeyPress);
-      window.removeEventListener('keydown', handleShiftKey);
-      window.removeEventListener('keyup', handleShiftKey);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [handleSpaceKeyPress, handleShiftKey]);
+  }, [handleSpaceKeyPress, handleKeyDown, handleKeyUp]);
 
   // Handle Mouse Move event
   const onMouseMoveHandle = (
@@ -145,8 +160,8 @@ const Context = () => {
         onMouseUp={(width, height, left, top) => {
           const nodesToActivate: number[] = [];
           for (const nodeId in nodeRefs.current) {
-            if (nodeRefs.current.hasOwnProperty(nodeId)) {
-              const nodeMargins = nodeRefs.current[nodeId]!.getNodeMargins();
+            if (nodeRefs.current[nodeId] !== null) {
+              const nodeMargins = nodeRefs.current[nodeId].getNodeMargins();
               if (!nodeMargins) return;
               const nodeOverlaps = doOverlap(
                 { left, top, right: left + width, bottom: top + height },
