@@ -4,13 +4,11 @@ This project is a proof of concept for building a node-based system in React. It
 
 # Getting Started
 
-1. Clone the Repository
 ```bash
 git clone https://github.com/vvsitnic/node-based-system
 cd node-based-system
 ```
 
-3. Run the Project
 ```bash
 npm run dev
 # or
